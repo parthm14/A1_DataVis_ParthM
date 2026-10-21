@@ -23,8 +23,9 @@ HOT = "#c0392b"
 COLD = "#2f6fb5"
 MORTALITY = "#222222"
 SALUBRITY = "#f2c230"
-MISSING = "#8e44ad"
-GRID = "#cccccc"
+MISSING = "#c9a0dc"
+GRID = "#e4e4e4"
+SPOKE_STRONG = "#c8c8c8"
 REFERENCE = "#555555"
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -73,7 +74,10 @@ def draw_grid(ax):
                 color=GRID, linewidth=0.3, zorder=0)
     for week in range(52):
         edge = WEEK_WIDTH * week
-        ax.plot([edge, edge], [0.05, 1.0], color=GRID, linewidth=0.2, zorder=0)
+        strong = week % 4 == 0
+        ax.plot([edge, edge], [0.05, 1.0],
+                color=SPOKE_STRONG if strong else GRID,
+                linewidth=0.3 if strong else 0.15, zorder=0)
 
 
 def draw_panel(ax, year_df, title):
