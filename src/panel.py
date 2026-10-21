@@ -27,7 +27,8 @@ MISSING = "#8e44ad"
 GRID = "#cccccc"
 REFERENCE = "#555555"
 
-MONTHS = list("JFMAMJJASOND")
+MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
 def temp_radius(temp):
@@ -108,7 +109,7 @@ def draw_panel(ax, year_df, title):
     ax.set_yticks([])
     ax.set_xticks(np.deg2rad(np.arange(12) * 30 + 15))
     ax.set_xticklabels(MONTHS, fontsize=6)
-    ax.tick_params(axis="x", pad=-2)
+    ax.tick_params(axis="x", pad=-4)
     ax.grid(False)
     ax.spines["polar"].set_visible(False)
     ax.text(0.0, 1.07, title, transform=ax.transAxes, ha="left", va="top",

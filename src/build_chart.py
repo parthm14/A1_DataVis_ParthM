@@ -5,6 +5,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from key import draw_key
 from load_data import load_farr
 from panel import draw_panel
 
@@ -25,6 +26,7 @@ def average_year(data):
 
 def main():
     plt.rcParams["pdf.fonttype"] = 42
+    plt.rcParams["font.family"] = "DejaVu Sans"
     data = load_farr()
 
     fig, axes = plt.subplots(ROWS, COLS, figsize=PAGE,
@@ -32,11 +34,13 @@ def main():
     panels = list(axes.flat)
     for ax, year in zip(panels, range(1840, 1851)):
         draw_panel(ax, data[data["year"] == year], str(year))
-        draw_panel(panels[-1], average_year(data), "Mean")
+    draw_panel(panels[-1], average_year(data), "Mean")
+
+    draw_key(fig, data)
 
     fig.suptitle("Temperature and Mortality of London, 1840 to 1850",
                  fontsize=14, y=0.985)
-    fig.subplots_adjust(left=0.03, right=0.97, top=0.945, bottom=0.18,
+    fig.subplots_adjust(left=0.03, right=0.97, top=0.945, bottom=0.235,
                         wspace=0.0, hspace=0.3)
 
     OUT.mkdir(exist_ok=True)
