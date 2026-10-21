@@ -5,6 +5,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patheffects import withStroke
 
 from load_data import load_farr
 
@@ -26,6 +27,7 @@ SALUBRITY = "#f2c230"
 MISSING = "#c9a0dc"
 GRID = "#e4e4e4"
 SPOKE_STRONG = "#c8c8c8"
+SPOKE_BANDS = [(0.1, 0.53), (0.62, 1.0)]
 REFERENCE = "#555555"
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -75,12 +77,23 @@ def draw_grid(ax):
     for week in range(52):
         edge = WEEK_WIDTH * week
         strong = week % 4 == 0
-        ax.plot([edge, edge], [0.05, 1.0],
-                color=SPOKE_STRONG if strong else GRID,
-                linewidth=0.3 if strong else 0.15, zorder=0)
+        for low, high in SPOKE_BANDS:
+            ax.plot([edge, edge], [low, high],
+                    color=SPOKE_STRONG if strong else GRID,
+                    linewidth=0.3 if strong else 0.15, zorder=0)
 
 
-def draw_panel(ax, year_df, title):
+def label_scales(ax, size=6):
+    halo = [withStroke(linewidth=1.6, foreground="white")]
+    for temp in (20, 40, 60):
+        ax.text(np.pi, temp_radius(temp), str(temp), fontsize=size, ha="center",
+                va="center", path_effects=halo, zorder=5)
+    for deaths in (800, 1200, 1600):
+        ax.text(np.pi, death_radius(deaths), str(deaths), fontsize=size,
+                ha="center", va="center", path_effects=halo, zorder=5)
+
+
+def draw_panel(ax, year_df, title, scale=False):
     year_df = year_df.sort_values("week")
     week_theta = WEEK_WIDTH * (year_df["week"].to_numpy() - 0.5)
     deaths = year_df["deaths"].to_numpy()
@@ -112,12 +125,14 @@ def draw_panel(ax, year_df, title):
     ax.set_ylim(0, 1)
     ax.set_yticks([])
     ax.set_xticks(np.deg2rad(np.arange(12) * 30 + 15))
-    ax.set_xticklabels(MONTHS, fontsize=6)
+    ax.set_xticklabels(MONTHS, fontsize=7)
     ax.tick_params(axis="x", pad=-4)
     ax.grid(False)
     ax.spines["polar"].set_visible(False)
-    ax.text(0.0, 1.07, title, transform=ax.transAxes, ha="left", va="top",
-            fontsize=10, fontweight="bold")
+    ax.text(-0.03, 1.07, title, transform=ax.transAxes, ha="left", va="top",
+            fontsize=9.5, fontweight="bold")
+    if scale:
+        label_scales(ax)
 
 
 if __name__ == "__main__":
