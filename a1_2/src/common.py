@@ -62,6 +62,6 @@ def add_caption(fig, text, width=105):
 
 def save(fig, name):
     fig.savefig(OUT / f"{name}.pdf")
-    fig.savefig(OUT / f"{name}.png", dpi=150)
+    fig.savefig(OUT / f"{name}.png", dpi=300)
     plt.close(fig)
     print("Saved", name)
