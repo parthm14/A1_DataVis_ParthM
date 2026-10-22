@@ -49,9 +49,9 @@ def size_for(mpg):
     return (np.asarray(mpg) - 10) * 1.7
 
 
-def size_handles(color=POINT):
+def size_handles(color=POINT, scale=1.0):
     return [Line2D([], [], marker="o", linestyle="", color=color, alpha=0.7,
-                   markersize=np.sqrt(size_for(mpg)), label=str(mpg))
+                   markersize=np.sqrt(size_for(mpg) / scale), label=str(mpg))
             for mpg in MPG_REFERENCE]
 
 
